@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: DepthMat
+  m_Shader: {fileID: 4800000, guid: 799ed47d48127c24497306e0bacf9097, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: 0
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: .300000012, y: .300000012}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Detail
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Illum
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ParallaxMap
+        second:
+          m_Texture: {fileID: 2800000, guid: ffa9c02760c2b4e8eb9814ec06c4b05b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: .477611929
+      data:
+        first:
+          name: _InvFade
+        second: 1
+      data:
+        first:
+          name: _Shininess
+        second: .118722163
+      data:
+        first:
+          name: thickness
+        second: .150000006
+      data:
+        first:
+          name: _GridThickness
+        second: .5
+      data:
+        first:
+          name: _GridSpacing
+        second: .00999999978
+      data:
+        first:
+          name: _EmissionLM
+        second: 0
+      data:
+        first:
+          name: _Parallax
+        second: .0396153852
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: .700692058, g: .814699948, b: .882352948, a: .423529416}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .926470578, g: .408737034, b: .408737034, a: .203921571}
+      data:
+        first:
+          name: _Emission
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _GridColour
+        second: {r: .500715911, g: .566176474, b: .31639272, a: .635294139}
+      data:
+        first:
+          name: _BaseColour
+        second: {r: 1, g: .999945939, b: .999945939, a: 0}
+      data:
+        first:
+          name: _TintColor
+        second: {r: .5, g: .5, b: .5, a: .5}
+      data:
+        first:
+          name: _EmisColor
+        second: {r: .200000003, g: .200000003, b: .200000003, a: 0}
+      data:
+        first:
+          name: _TransparentColour
+        second: {r: 0, g: 0, b: 0, a: 0}

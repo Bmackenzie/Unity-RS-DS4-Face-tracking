@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 1142f1d6fce603c4fa40185e2d63d493
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - m_senseInput: {instanceID: 0}
+  - m_meshPrefab: {fileID: 100000, guid: 43847768f98a5f843b1fe31d0b67ad83, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
