@@ -17,7 +17,10 @@ using OpenCvSharp;
 
 public class OpenCvViewer : MonoBehaviour
 {
-    public SenseInput m_senseInput;
+	/// <summary>
+	/// The sense input interface instance.
+	/// </summary>
+	public SenseInput m_senseInput;
 
     /// <summary>
     /// Maxtrix used to store the canny edge
@@ -74,7 +77,7 @@ public class OpenCvViewer : MonoBehaviour
                 //Store Originals pixels
                 Color32[] pix = m_texColorOriginal.GetPixels32();
                 System.Array.Reverse(pix);
-                Texture2D destTex = new Texture2D(m_texColorOriginal.width, m_texColorOriginal.height);
+                //Texture2D destTex = new Texture2D(m_texColorOriginal.width, m_texColorOriginal.height);
                 m_texColorModified.SetPixels32(pix);
                 m_texColorModified.Apply();
 

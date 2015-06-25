@@ -8,7 +8,7 @@ Copyright(c) 2011-2015 Intel Corporation. All Rights Reserved.
 
 *********************************************************************************/
 using System.Collections.Generic;
-
+/*
 /// <summary>
 /// Vector3 representation independent from the one in UnityEngine.Vector3.
 /// </summary>
@@ -29,7 +29,7 @@ public class Vector3f
         return new float[] { x, y, z };
     }
 };
-
+*/
 public class CameraIntrinsics {
 	public PXCMSizeI32  size;
 	public PXCMPointF32 principalPoint;
