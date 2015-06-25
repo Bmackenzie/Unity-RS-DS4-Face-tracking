@@ -1,58 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-
+//TODO
+/*
+ * Move initialization to SenseInput form Start
+ * 
+ * x OnModuleProcessedFrame
+ * [Initialize Differently?]
+ * 
+ * x Set global list,
+ * x Make clustom class, store rectangular data, as well as average depth
+ * --> Should I clear it in update?!
+ * 
+ * Add to camera so it is called
+ * 
+ * Somewhere else, access the public list of positions.
+ */
 public class FaceTracker : MonoBehaviour {
 
 	public SenseInput m_senseInput;
 	private bool shuttingDown = false;
 
-	private PXCMImage m_sample;
-
-	private int numExpressions = 20;
+	private PXCMCapture.Sample m_sample;
+	
 	private int numDetections = 5;
-	private int numLandmarks = 180;
-	private int numPoses = 20;
-	private int numPulses = 20;
+
+	public  ArrayList faceLocations;
 
 	// Use this for initialization
+	// Go to SenseInputStart
 	void Start () {
 		m_senseInput.m_OnSample+=OnSample;
 		m_senseInput.m_ShutDown+=OnShutdown;
-		m_senseInput.SenseManager.EnableFace ();
+		m_senseInput.m_OnData += OnModuleProcessedFrame;
 
-		if (m_senseInput.SenseManagern == null){
+		if (m_senseInput.SenseManager == null){
 			throw new Exception("PXCMSenseManager null");
 		}
-		
-		if (m_senseInput.SenseManager.captureManager == null){
-			throw new Exception("PXCMCaptureManager null");
-		}
-		
-		if (m_senseInput.m_height != null && m_senseInput.m_width != null){
-			var streamProfile = new PXCMCapture.Device.StreamProfileSet{
-				color = 
-				{
-					frameRate = m_senseInput.m_fps,
-					imageInfo = 
-					{
-						//Formet????
-						height = m_senseInput.m_height,
-						width = m_senseInput.m_width
-					}
-				}
-			};
-			
-			// DO I NEED THIS?
-			//				if (m_form.IsPulseEnabled() && (set.color.imageInfo.width < 1280 || set.color.imageInfo.height < 720))
-			//				{
-			//					captureMgr.FilterByStreamProfiles(PXCMCapture.StreamType.STREAM_TYPE_COLOR, 1280, 720, 0);
-			//				}
-			m_senseInput.SenseManager.captureManager.FilterByStreamProfiles(streamProfile);
-		}
+		m_senseInput.SenseManager.EnableFace ();
+		PXCMFaceModule faceModule = m_senseInput.SenseManager.QueryFace ();
 
-		// Ensure that the faceModule exists
-		PXCMFaceModule faceModule = m_senseInput.SenseManager.QueryFace();
 		if (faceModule == null ){
 			throw new Exception("QueryFace returned null");
 		}
@@ -63,44 +50,13 @@ public class FaceTracker : MonoBehaviour {
 			throw new Exception("FaceConfiguration null");
 		}
 
-		moduleConfiguration.SetTrackingMode(PXCMFaceConfiguration.TrackingModeType.FACE_MODE_COLOR_PLUS_DEPTH);
-		moduleConfiguration.strategy = PXCMFaceConfiguration.TrackingStrategyType.STRATEGY_RIGHT_TO_LEFT;
-		moduleConfiguration.detection.maxTrackedFaces = numDetections;
-		moduleConfiguration.landmarks.maxTrackedFaces = numLandmarks;
-		moduleConfiguration.pose.maxTrackedFaces = numPoses;
-
-		PXCMFaceConfiguration.ExpressionsConfiguration econfiguration = moduleConfiguration.QueryExpressions();
-		if (econfiguration == null)
-		{
-			throw new Exception("ExpressionsConfiguration null");
-		}
-		econfiguration.properties.maxTrackedFaces = numExpressions;
-		
-		econfiguration.EnableAllExpressions();
 		moduleConfiguration.detection.isEnabled = true;
-		moduleConfiguration.landmarks.isEnabled = true;
-		moduleConfiguration.pose.isEnabled = true;
-		econfiguration.Enable();
-		
-		PXCMFaceConfiguration.PulseConfiguration pulseConfiguration = moduleConfiguration.QueryPulse();
-		if (pulseConfiguration == null)
-		{
-			throw new Exception("PulseConfiguration null");
-		}
-		
-		pulseConfiguration.properties.maxTrackedFaces = numPulses;
-		pulseConfiguration.Enable();
-
-		PXCMFaceConfiguration.RecognitionConfiguration qrecognition = moduleConfiguration.QueryRecognition();
-		if (qrecognition == null)
-		{
-			throw new Exception("PXCMFaceConfiguration.RecognitionConfiguration null");
-		}
-		qrecognition.Enable();
 
 		// Skipped conversion of seemingly not needed code?
 
 		pxcmStatus applyChangesStatus = moduleConfiguration.ApplyChanges();
+		// Should I dispose of the faceModule and configuration?
+
 		m_senseInput.SenseManager.Init ();
 
 	}
@@ -108,26 +64,60 @@ public class FaceTracker : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		lock (this) {
-			if (m_sample == null)
-				return;
+			//if (m_sample == null)
+			//	return;
+			//PXCMFaceModule fm=m_senseInput.SenseManager.QueryFace();
+			//PXCMFaceData fdata= fm.CreateOutput();
+			//Debug.Log(fdata.QueryNumberOfDetectedFaces());
 
+			//fdata.Dispose();
+			//fm.Dispose();
 
 			// discard the current sample
-			m_sample.Dispose ();
+			//m_sample.Dispose ();
+
+			////////////////////////////////////
+			/// Should I clear the arraylist here?!
 			m_sample = null;
 		}
 	}
 
+	void OnModuleProcessedFrame(int mid, PXCMBase module, PXCMCapture.Sample sample){
 
+		if (shuttingDown) {
+			return;
+		}
+
+		if (mid == PXCMFaceModule.CUID) {
+			PXCMFaceModule fm = m_senseInput.SenseManager.QueryFace();
+			PXCMFaceData.Face[] faces = fm.CreateOutput().QueryFaces();
+			foreach (PXCMFaceData.Face face in faces){
+				PXCMFaceData.DetectionData detData = face.QueryDetection();
+
+				PXCMRectI32 rect;
+				detData.QueryBoundingRect(out rect);
+
+				float depth;
+				detData.QueryFaceAverageDepth(out depth);
+
+				FaceLocation faceLoc = new FaceLocation(rect.w, rect.h, rect.x, rect.y, depth);
+				faceLocations.Add(faceLoc);
+			}
+			return;
+		}
+		return;
+	}
+
+	// I don't think I reall y need this...
 	void OnSample (PXCMCapture.Sample sample)
 	{
 		if (shuttingDown) return;
-		
-		lock(this) {
-			if (m_sample!=null) m_sample.Dispose();
-			m_sample=sample.color;
-			m_sample.QueryInstance<PXCMAddRef>().AddRef();
-		}
+
+		//lock(this) {
+		//	if (m_sample!=null) m_sample.Dispose();
+		//	m_sample=sample;
+		//	m_sample.QueryInstance<PXCMAddRef>().AddRef();
+		//}
 	}
 
 	void OnShutdown ()
@@ -136,9 +126,45 @@ public class FaceTracker : MonoBehaviour {
 
 		lock(this) {
 			if (m_sample!=null){
-				m_sample.Dispose();
+		//		m_sample.Dispose();
 				m_sample=null;
 			}
+		}
+	}
+
+	public class FaceLocation{
+		private readonly int w;
+		private readonly int h;
+		private readonly int x;
+		private readonly int y;
+		private readonly float z;
+
+		public FaceLocation(int w, int h, int x, int y, float z){
+			this.w=w;
+			this.h=h;
+			this.x=x;
+			this.y=y;
+			this.z=z;
+		}
+
+		public int getWidth(){
+			return this.w;
+		}
+
+		public int getHeight(){
+			return this.h;
+		}
+
+		public int getX(){
+			return this.x;
+		}
+
+		public int getY(){
+			return this.y;
+		}
+
+		public float getDepth(){
+			return this.z;
 		}
 	}
 }
