@@ -13,6 +13,7 @@ public class FaceTracker : MonoBehaviour {
 	private int numDetections = 5;
 	private int numLandmarks = 180;
 	private int numPoses = 20;
+	private int numPulses = 20;
 
 	// Use this for initialization
 	void Start () {
@@ -67,7 +68,6 @@ public class FaceTracker : MonoBehaviour {
 		moduleConfiguration.detection.maxTrackedFaces = numDetections;
 		moduleConfiguration.landmarks.maxTrackedFaces = numLandmarks;
 		moduleConfiguration.pose.maxTrackedFaces = numPoses;
-		///////////////////
 
 		PXCMFaceConfiguration.ExpressionsConfiguration econfiguration = moduleConfiguration.QueryExpressions();
 		if (econfiguration == null)
@@ -88,17 +88,8 @@ public class FaceTracker : MonoBehaviour {
 			throw new Exception("PulseConfiguration null");
 		}
 		
-		pulseConfiguration.properties.maxTrackedFaces = m_form.NumPulse;
+		pulseConfiguration.properties.maxTrackedFaces = numPulses;
 		pulseConfiguration.Enable();
-
-
-
-
-		
-
-
-		////////////////
-
 
 		PXCMFaceConfiguration.RecognitionConfiguration qrecognition = moduleConfiguration.QueryRecognition();
 		if (qrecognition == null)
@@ -110,6 +101,7 @@ public class FaceTracker : MonoBehaviour {
 		// Skipped conversion of seemingly not needed code?
 
 		pxcmStatus applyChangesStatus = moduleConfiguration.ApplyChanges();
+		m_senseInput.SenseManager.Init ();
 
 	}
 	
