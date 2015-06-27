@@ -230,6 +230,7 @@ GameObject:
   - 23: {fileID: 276509540}
   - 114: {fileID: 276509542}
   - 114: {fileID: 276509543}
+  - 114: {fileID: 276509544}
   m_Layer: 0
   m_Name: CameraRGBViewer
   m_TagString: Untagged
@@ -303,6 +304,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8fbdfe7265f3b04f8acdf515c6e5720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_senseInput: {fileID: 393863687}
+--- !u!114 &276509544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 276509538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00488dec42a9c184a9ed4d7fc6da23fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_senseInput: {fileID: 393863687}
@@ -553,6 +566,7 @@ GameObject:
   - 23: {fileID: 1108416762}
   - 114: {fileID: 1108416761}
   - 114: {fileID: 1108416760}
+  - 114: {fileID: 1108416764}
   m_Layer: 0
   m_Name: CameraRGBViewer
   m_TagString: Untagged
@@ -627,6 +641,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1108416758}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1108416764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1108416758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00488dec42a9c184a9ed4d7fc6da23fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_senseInput: {fileID: 393863687}
 --- !u!1 &1270250509
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,6 +699,7 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
+  m_RepeatDelay: .5
   m_AllowActivationOnMobileDevice: 0
 --- !u!114 &1270250512
 MonoBehaviour:
@@ -922,6 +949,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!4 &1842780423
 Transform:
   m_ObjectHideFlags: 0
@@ -935,7 +963,7 @@ Transform:
   - {fileID: 1108416759}
   m_Father: {fileID: 103196232}
   m_RootOrder: 1
---- !u!4 &1940668225
+--- !u!4 &1940668225 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400002, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
   m_PrefabInternal: {fileID: 1088297772}

@@ -35,6 +35,7 @@ public class CameraRGBViewer : MonoBehaviour
     /// Event handler to notify display texture has been updated
     void Start()
     {
+		Debug.Log (m_senseInput);
 		m_senseInput.m_OnSample+=OnSample;
 		m_senseInput.m_ShutDown+=OnShutdown;
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class SenseInput : MonoBehaviour {
 	public bool m_enableScenePerception=true;
@@ -73,6 +74,31 @@ public class SenseInput : MonoBehaviour {
 			m_senseManager.EnableScenePerception();
 			m_senseManager.PauseScenePerception(true);
 		}
+
+		//pxcmStatus status = m_senseManager.EnableFace();
+//		Debug.Log (status);
+		//m_senseManager.PauseFace (true);
+//
+//		PXCMFaceModule faceModule = SenseManager.QueryFace ();
+//		
+//		if (faceModule == null ){
+//			throw new Exception("QueryFace returned null");
+//		}
+//		
+//		PXCMFaceConfiguration moduleConfiguration = faceModule.CreateActiveConfiguration();
+//		if (moduleConfiguration == null)
+//		{
+//			throw new Exception("FaceConfiguration null");
+//		}
+//		
+//		moduleConfiguration.detection.isEnabled = true;
+//		
+//		pxcmStatus applyChangesStatus = moduleConfiguration.ApplyChanges();
+//		if (applyChangesStatus != pxcmStatus.PXCM_STATUS_NO_ERROR) {
+//			throw new Exception("Module Configuration Apply Changes Failed");
+//		}
+		//moduleConfiguration.Dispose ();
+		//faceModule.Dispose ();
 	}
 	
 	// Update is called once per frame
@@ -91,7 +117,7 @@ public class SenseInput : MonoBehaviour {
 		m_status=m_senseManager.Init(handler);
 		if (m_status<pxcmStatus.PXCM_STATUS_NO_ERROR) {
 			Debug.Log ("Init Failed; " + m_status);
-			return;
+//			return;
 		}
 
 		// Start streaming

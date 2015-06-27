@@ -22,8 +22,6 @@ public class FaceTracker : MonoBehaviour {
 	private bool shuttingDown = false;
 
 	private PXCMCapture.Sample m_sample;
-	
-	private int numDetections = 5;
 
 	public  ArrayList faceLocations;
 
@@ -33,37 +31,12 @@ public class FaceTracker : MonoBehaviour {
 		m_senseInput.m_OnSample+=OnSample;
 		m_senseInput.m_ShutDown+=OnShutdown;
 		m_senseInput.m_OnData += OnModuleProcessedFrame;
-
-		if (m_senseInput.SenseManager == null){
-			throw new Exception("PXCMSenseManager null");
-		}
-		m_senseInput.SenseManager.EnableFace ();
-		PXCMFaceModule faceModule = m_senseInput.SenseManager.QueryFace ();
-
-		if (faceModule == null ){
-			throw new Exception("QueryFace returned null");
-		}
-
-		PXCMFaceConfiguration moduleConfiguration = faceModule.CreateActiveConfiguration();
-		if (moduleConfiguration == null)
-		{
-			throw new Exception("FaceConfiguration null");
-		}
-
-		moduleConfiguration.detection.isEnabled = true;
-
-		// Skipped conversion of seemingly not needed code?
-
-		pxcmStatus applyChangesStatus = moduleConfiguration.ApplyChanges();
-		// Should I dispose of the faceModule and configuration?
-
-		m_senseInput.SenseManager.Init ();
-
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		lock (this) {
+
 			//if (m_sample == null)
 			//	return;
 			//PXCMFaceModule fm=m_senseInput.SenseManager.QueryFace();
