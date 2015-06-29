@@ -129,10 +129,12 @@ public class OpenCvViewer : MonoBehaviour
         }
     }
 
+	// Needs optimization!
     void IplImageToTexture2D()
     {
         int jBackwards = m_senseInput.m_height;
 
+		// Consider parallelizing for loop
         for (int i = 0; i < m_senseInput.m_height; i++)
         {
             for (int j = 0; j < m_senseInput.m_width; j++)
@@ -156,10 +158,12 @@ public class OpenCvViewer : MonoBehaviour
         m_texColorModified.Apply();
     }
 
+	// Needs to be optimized
     void Texture2DtoIplImage()
     {
         int jBackwards = m_senseInput.m_height;
 
+		// Also consider parallelizing this loop
         for (int v = 0; v < m_senseInput.m_height; ++v)
         {
             for (int u = 0; u < m_senseInput.m_width; ++u)
