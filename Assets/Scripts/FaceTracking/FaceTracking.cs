@@ -38,7 +38,8 @@ public class FaceTracking : MonoBehaviour {
                             moduleConfiguration.strategy = PXCMFaceConfiguration.TrackingStrategyType.STRATEGY_RIGHT_TO_LEFT;
                             moduleConfiguration.detection.maxTrackedFaces = 5;
                             moduleConfiguration.detection.isEnabled = true;
-                            moduleConfiguration.EnableAllAlerts();
+							moduleConfiguration.pose.isEnabled = false;
+							moduleConfiguration.EnableAllAlerts();
                             moduleConfiguration.SubscribeAlert(FaceAlertHandler);
 
                             pxcmStatus applyChangesStatus = moduleConfiguration.ApplyChanges();
@@ -52,6 +53,10 @@ public class FaceTracking : MonoBehaviour {
                                     moduleOutput = faceModule.CreateOutput();
                                     if (moduleOutput != null)
                                     {
+										// Enumarate devices
+										EnumDevices();
+
+										/*
                                         // Create instance for video stream parameters
                                         PXCMCapture.Device.StreamProfileSet profiles;
                                         //Retrieve the capture device intance 
@@ -65,6 +70,7 @@ public class FaceTracking : MonoBehaviour {
                                                 Debug.Log("Depth stream is not supported for device");
                                             }
                                         }
+                                        */
                                     }
                                 }
                             }
@@ -74,6 +80,40 @@ public class FaceTracking : MonoBehaviour {
             }
         }
     }
+
+	void OnDisable()
+	{
+		SenseManager.Dispose ();
+	}
+
+	void EnumDevices()
+	{
+		// session is a PXCMSession instance
+		PXCMSession.ImplDesc desc1=new PXCMSession.ImplDesc();
+		desc1.group=PXCMSession.ImplGroup.IMPL_GROUP_SENSOR;
+		desc1.subgroup=PXCMSession.ImplSubgroup.IMPL_SUBGROUP_VIDEO_CAPTURE;
+		
+		for (int m=0;; m++) {
+			PXCMSession.ImplDesc desc2;
+			if (Session.QueryImpl (desc1, m, out desc2) < pxcmStatus.PXCM_STATUS_NO_ERROR)
+				break;
+			Debug.Log ("Module " + m + ": " + desc2.friendlyName);
+
+			if (desc2.friendlyName.Contains ("DS4")) {
+				PXCMCapture capture;
+				Session.CreateImpl<PXCMCapture> (desc2, out capture);
+			
+				// print out all device information
+				for (int d=0;; d++) {
+					PXCMCapture.DeviceInfo dinfo;
+					if (capture.QueryDeviceInfo (d, out dinfo) < pxcmStatus.PXCM_STATUS_NO_ERROR)
+						break;
+					Debug.Log ("Device " + d + ": " + dinfo.name);
+				}
+				capture.Dispose ();
+			}
+		}
+	}
 
     private bool CheckForDepthStream(PXCMCapture.Device.StreamProfileSet profiles, PXCMFaceModule faceModule)
     {
@@ -102,18 +142,19 @@ public class FaceTracking : MonoBehaviour {
     void Update()
     {
         pxcmStatus status = SenseManager.AcquireFrame(true);
-        Debug.Log("status: " + status);
         if (status == pxcmStatus.PXCM_STATUS_NO_ERROR)
         {
             var sample = SenseManager.QueryFaceSample();
             if (sample != null)
             {
                 moduleOutput.Update();
+				PXCMFaceData.Face[] faces = moduleOutput.QueryFaces();
+				if(faces != null)
+				{
+					Debug.Log("Face count: " + faces.Length);	
+				}
             }
         }
         SenseManager.ReleaseFrame();
-    }
-
-    void SimplePipeline() { 
     }
 }
