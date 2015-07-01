@@ -35,7 +35,7 @@ public class FaceTracking : MonoBehaviour {
                         PXCMFaceConfiguration moduleConfiguration = faceModule.CreateActiveConfiguration();
                         if (moduleConfiguration != null)
                         {
-                            moduleConfiguration.SetTrackingMode(PXCMFaceConfiguration.TrackingModeType.FACE_MODE_COLOR);
+                            moduleConfiguration.SetTrackingMode(PXCMFaceConfiguration.TrackingModeType.FACE_MODE_COLOR_PLUS_DEPTH);
                             moduleConfiguration.strategy = PXCMFaceConfiguration.TrackingStrategyType.STRATEGY_RIGHT_TO_LEFT;
                             moduleConfiguration.detection.maxTrackedFaces = 5;
                             moduleConfiguration.detection.isEnabled = true;
