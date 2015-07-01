@@ -7,6 +7,7 @@ public class FaceTracking : MonoBehaviour {
     public PXCMSession Session;
     public PXCMCaptureManager captureMgr;
     public PXCMFaceData moduleOutput;
+	public ArrayList faceLocations= new ArrayList();
 
 	// Use this for initialization
     void Start()
@@ -142,6 +143,10 @@ public class FaceTracking : MonoBehaviour {
     void Update()
     {
         pxcmStatus status = SenseManager.AcquireFrame(true);
+
+		// Clear the face data from prior updates
+		faceLocations.Clear ();
+
         if (status == pxcmStatus.PXCM_STATUS_NO_ERROR)
         {
             var sample = SenseManager.QueryFaceSample();
@@ -153,8 +158,70 @@ public class FaceTracking : MonoBehaviour {
 				{
 					Debug.Log("Face count: " + faces.Length);	
 				}
+
+				foreach (PXCMFaceData.Face face in faces){
+					PXCMFaceData.DetectionData detData = face.QueryDetection();
+					
+					PXCMRectI32 rect;
+					detData.QueryBoundingRect(out rect);
+					
+					float depth;
+					detData.QueryFaceAverageDepth(out depth);
+					
+					FaceLocation faceLoc = new FaceLocation(rect.w, rect.h, rect.x, rect.y, depth);
+					faceLocations.Add(faceLoc);
+					Debug.Log(faceLoc);
+				}
+
             }
         }
         SenseManager.ReleaseFrame();
     }
+
+	public class FaceLocation{
+		private readonly int w;
+		private readonly int h;
+		private readonly int x;
+		private readonly int y;
+		private readonly float z;
+		
+		public FaceLocation(int w, int h, int x, int y, float z){
+			this.w=w;
+			this.h=h;
+			this.x=x;
+			this.y=y;
+			this.z=z;
+		}
+		
+		public int getWidth(){
+			return this.w;
+		}
+		
+		public int getHeight(){
+			return this.h;
+		}
+		
+		public int getX(){
+			return this.x;
+		}
+		
+		public int getY(){
+			return this.y;
+		}
+		
+		public float getDepth(){
+			return this.z;
+		}
+
+		public override string ToString(){
+			string returnString = "Single FaceLocation Data:\n";
+			returnString += "\tWidth : " + w + "\n";
+			returnString += "\tHeight : " + h + "\n";
+			returnString += "\tX-Coord : " + x + "\n";
+			returnString += "\tY-Coord : " + y + "\n";
+			returnString += "\tDepth : " + z + "\n";
+
+			return returnString;
+		}
+	}
 }
