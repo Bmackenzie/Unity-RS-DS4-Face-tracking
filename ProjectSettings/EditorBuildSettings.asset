@@ -5,5 +5,5 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/DS4-RIFT-HUD/DS4-Rift.unity
+  - enabled: 0
+    path: Assets/Scenes/SP_Demo.unity
